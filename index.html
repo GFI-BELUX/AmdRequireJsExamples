@@ -1,0 +1,215 @@
+<html>
+	<head>
+		<title>RequireJs Demo</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css">
+		<style>
+			.image-full img{
+				width:100%;
+			}
+			iframe{
+				border: none;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.js"></script>
+		<div class="container" style="margin-top:25px">
+			<div class="panel panel-default">
+			  <div class="panel-heading">RequireJS demo</div>
+			  <div class="panel-body">
+				<div>
+
+				  <!-- Nav tabs -->
+				  <ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#intro" aria-controls="intro" role="tab" data-toggle="tab">I Intro</a></li>
+					<li role="presentation"><a href="#introGeneralUsage" aria-controls="introGeneralUsage" role="tab" data-toggle="tab">II General Usage</a></li>
+					<li role="presentation"><a href="#amdModule" aria-controls="amdModule" role="tab" data-toggle="tab">01 Amd module</a></li>
+					<li role="presentation"><a href="#amdModeleDependencies" aria-controls="amdModeleDependencies" role="tab" data-toggle="tab">02 Amd module + dependencies</a></li>
+					<li role="presentation"><a href="#multipleLibs" aria-controls="multipleLibs" role="tab" data-toggle="tab">03 Multiple libraries</a></li>
+					<li role="presentation"><a href="#differentLocation" aria-controls="differentLocation" role="tab" data-toggle="tab">04 Multiple module dependencies</a></li>
+					<li role="presentation" class="dropdown">
+						<a href="#" id="moreDropDown" class="dropdown-toggle" data-toggle="dropdown" aria-controls="moreDropDown" aria-expanded="true">
+							More <span class="caret"></span>
+						</a> 
+						<ul class="dropdown-menu" aria-labelledby="more" id="moreDropDown">
+							<li><a href="#baseUrl" role="tab" data-toggle="tab" aria-controls="baseUrl">05 Config: baseUrl</a></li>
+							<li><a href="#paths" role="tab" data-toggle="tab" aria-controls="paths">06 Config: paths</a></li>
+							<li><a href="#order" role="tab" data-toggle="tab" aria-controls="order">07 Define AMD module name</a></li>
+							<li><a href="#packaging" role="tab" data-toggle="tab" aria-controls="packaging">08 Packaging libraries</a></li>
+							<li><a href="#packaginAMD" role="tab" data-toggle="tab" aria-controls="packaginAMD">09 Packaging libraries as AMD module</a></li>
+							<li><a href="#packagingOrder" role="tab" data-toggle="tab" aria-controls="packagingOrder">10 Packaging libraries: require order</a></li>
+							<li><a href="#patterns" role="tab" data-toggle="tab" aria-controls="patterns">11 Patterns</a></li>
+						</ul>
+					</li>
+				  </ul>
+
+				  <!-- Tab panes -->
+				  <div class="tab-content">
+					
+					<!-- I SCRIPT LOADER -->
+					<div role="tabpanel" class="tab-pane active image-full" id="intro">
+						<h1>I. Intro - what is a scriptloader and why should we use it?</h1>
+						<h2>Current website structure</h2>
+						<p>If you look at the current toyota website, the general structure is like this:</p>
+						<img src='diagrams/00_currentSituation.png' />
+						<p>This way of working has advantages & disadvantages...<br>
+							<b>Pros:</b>
+							<ul>
+								<li>All javascript logic for <b>each page</b> is cached on first pageview. Second page will get all javascript directly from cache</li>
+								<li>Only 2 requests are done to download all javascript</li>
+							</ul>
+							<b>Cons:</b>
+							<ul>
+								<li>Too much script is downloaded on the first visit (scripts for components which are not there are downloaded)</li>
+								<li>Too many libraries are initialized</li>
+							</ul>
+						</p>
+						<p>To only download & initialize the scripts we actually need, we use a scriptloader (requirejs, in this presentation)</p>
+						<h2>Using a scriptloader</h2>
+						<img src='diagrams/00_requireLoadWithoutDependencies.png' />
+						<p>Let's assume 'T1-dealerfinder.js' is only needed on the 'homepage', and 'T1-accessories.js' is only needed on the 'carchapter'.</p>
+						<p>Advantages & disadvantages for this approach<br>
+							<b>Pros:</b>
+							<ul>
+								<li>Only the scripts which are actually needed are downloaded and initialized</li>
+							</ul>
+							<b>Cons:</b>
+							<ul>
+								<li>Many <b>more requests</b> are needed</li>
+								<li><b>Dependencies</b> are not identified (T1-dealerfinder will need jQuery, postal, lodash and bootstrap to work properly; you'll have to identify these dependencies yourself</li>
+							</ul>
+						</p>
+						<h2>Using a scriptloader + dependencies</h2>
+						<img src='diagrams/00_requireLoadWithDependencies.png' />
+						<p>Following this structure, each and every component will become easier to reuse elsewhere. Each component knows by itself which dependencies it needs to download to work properly.</p>
+						<p>Big advantage of using requirejs + dependencies: All dependancies will download automatically (no 3rd party plugin will load without any purpose).</p>
+						<h2>Using a scriptloader + dependencies + packager</h2>
+						<img src='diagrams/00_requireIdeal.png' />
+						<p>In this setup we limit the amount of requests to <b>bundle all components</b> which are needed on <b>every page</b>.</p>
+						<p>In this case: 
+							<ul>
+								<li>T1-utilities, postal, lodash, T1-navigation, jQuery & bootstrap will be delivered together</li>
+								<li>T1-dealerfinder will ONLY download on the homepage</li>
+								<li>T1-accessories will ONLY download on the carchapter</li>
+							</ul>
+						</p>
+					</div>
+					
+					<!-- II GENERAL USAGE -->
+					<div role="tabpanel" class="tab-pane image-full" id="introGeneralUsage">
+						<h1>II. General usage</h1>
+						<h2>Basic require structure</h2>
+						<img src="diagrams/00_basicRequireStructure.png">
+						<p><b>require(['module1', 'module2', 'module3'], function(m1, m2, m3){});</b></p>
+						<p>Where the 'modules' can be 
+							<ul><li>filepaths</li><li>keys (see require config)</li><li>filenames within the same directory</li></ul>
+						</p>
+						<p>m1,m2,m3 will contain all module methods which are exposed by the factory functions</p>
+						<p>Require works purely with AMD modules. To be able to load your script via require, you should write it as an AMD module.</p>
+						<h2>What is an AMD module</h2>
+						<img src="diagrams/00_AMDModule.png" />
+						<p>An AMD module defines 3 things: <b>define('moduleName', [dependencies], factory)</b></p>
+						<ul>
+							<li>ModuleName: the name of the module (this only has importance when you package multiple modules into 1 file)</li>
+							<li>Dependencies: all dependency-modules which need to be loaded to insure correct functioning of the defined module</li>
+							<li>Factory: function which generates the module instance</li>
+						</ul>
+						<h2>What is a factory</h2>
+						<p>Imagine creating a date in javascript, <b>var d = new Date();</b>: here we create an instance (var d) of object 'Date'. Important to realize is that Object 'Date' is only a definition of functionalities. The real initialization of the object happens when we run the constructor (new Date), and therefor create an instance of the object</p>
+						<p>A factory works more or less similar. The factory is nothing more than a function which will generate your object. In other words, it's just a definition! The initialization will only happen once the factory is executed.</p>
+						<img src="diagrams/00_AMDModuleFactory.png" />
+						<p>At the moment we already make use of factory functions, the only difference with require is that we run these factories while the page is loading.</p>
+						<h2>Where to place the require-statement</h2>
+						<p>You have 2 choices</p>
+						<ul>
+							<li>Place the require-statement <b>in</b> the function where you need it<br><img src="diagrams/00_AMDModulePlacementInside.png" /></li>
+							<li>Place the require-statement <b>around</b> a function (or component)<br><img src="diagrams/00_AMDModulePlacementAround.png" /></li>
+						</ul>
+						<p>When placed <b>around</b> the function, the amd-module will be downloaded <b>before</b> T1.accessories module definition is created; when placed <b>inside</b> the function, the amd-module will be loaded the first time you run the function</p>
+						<h2>Require AMD-module load sequence</h2>
+						<p>To load an AMD-module require can fetch the script in 3 different ways:</p>
+						<ol>
+							<li>Require will check if the module-name was <b>defined</b> earlier somewhere: via define('moduleName', [dependencies], factory)</li>
+							<li>If the module was not defined earlier, require will check if you have a <b>path configured</b> to the module (in require.config.paths)</li>
+							<li>If none of the options above, require will try to interpret the <b>module-name as a path</b></li>
+						</ol>
+						<img src="diagrams/00_AMDModuleLoadingOrder.png" />
+					</div>
+					
+					<!-- 01 AMD MODULE -->
+					<div role="tabpanel" class="tab-pane" id="amdModule">
+						<h1>1. A single AMD module</h1>
+						<iframe src="01_RequireJs.html" width="100%" height="1500"></iframe>
+					</div>
+					
+					<!-- 02 AMD MODULE WITH DEPENDENCIES -->
+					<div role="tabpanel" class="tab-pane" id="amdModeleDependencies">
+						<h1>2. AMD module with dependencies</h1>
+						<iframe src="02_RequireJs.html" width="100%" height="1500"></iframe>
+					</div>
+					
+					<!-- 03 MULTIPLE LIBS -->
+					<div role="tabpanel" class="tab-pane" id="multipleLibs">
+						<h1>3. Requiring multiple libraries</h1>
+						<iframe src="03_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+					
+					<!-- 04 Multiple module dependencies -->
+					<div role="tabpanel" class="tab-pane" id="differentLocation">
+						<h1>4. Multiple module dependencies</h1>
+						<iframe src="04_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+				  
+				  	<!-- 05 Config: baseUrl -->
+					<div role="tabpanel" class="tab-pane" id="baseUrl">
+						<h1>5. Config: baseUrl</h1>
+						<iframe src="05_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+		
+					<!-- 06 Config: paths -->
+					<div role="tabpanel" class="tab-pane" id="paths">
+						<h1>6. Config: paths</h1>
+						<iframe src="06_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+					
+					<!-- 07 Define AMD module name -->
+					<div role="tabpanel" class="tab-pane" id="order">
+						<h1>7. Define AMD module name</h1>
+						<iframe src="07_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+					
+					<!-- 08 Packaging libraries -->
+					<div role="tabpanel" class="tab-pane" id="packaging">
+						<h1>8. Packaging libraries</h1>
+						<iframe src="08_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+					
+					<!-- 09 Packaging libraries as AMD module -->
+					<div role="tabpanel" class="tab-pane" id="packaginAMD">
+						<h1>9. Packaging libraries: return from packaged file</h1>
+						<iframe src="09_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+					
+					<!-- 10 Packaging libraries: require order -->
+					<div role="tabpanel" class="tab-pane" id="packagingOrder">
+						<h1>10. Packaging libraries: require order</h1>
+						<iframe src="10_RequireJs.html" width="100%" height="2000"></iframe>
+					</div>
+					
+					<!-- 11 Patterns -->
+					<div role="tabpanel" class="tab-pane" id="patterns">
+						<h1>11. Patterns</h1>
+						<iframe src="11_RequireJs.html" width="100%" height="2800"></iframe>
+					</div>
+					
+				  </div>
+
+				</div>
+				
+			  </div>
+			</div>
+		</div>
+	</body>
+</html>

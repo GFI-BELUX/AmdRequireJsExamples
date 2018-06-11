@@ -1,0 +1,25 @@
+<html>
+	<head>
+		<title>2 - RequireJs examples</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
+				
+		<script>
+			var hello = function(name){
+				require(['helloAmdWithDependencies'], function(helloAmd){
+					helloAmd.show(name);
+				});
+			}
+			
+			require(['ace','console'], function(e,c){
+				e.create({height:'190px', noScroll: true, url:'helloAmdWithDependencies.js', mode: 'ace/mode/javascript', header: '<img src="js.png"><a href="helloAmdWithDependencies.js" target="blank">helloAmdWithDependencies.js</a>'});
+				e.create({height:'250px', noScroll: true, header: '<img src="page.png"><a href="02_RequireJs.html" target="blank">02_RequireJs.html</a>'});
+				c.create();
+			});
+		</script>
+		
+	</body>
+</html>

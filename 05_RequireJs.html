@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>5 - RequireJs examples</title>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap-theme.min.css">
+	</head>
+	<body>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
+		<script>
+			require.config({
+				baseUrl: 'scripts/'
+			});
+			var hello = function(name){
+				require(['helloAmdWithAnimation'], function(helloAmd){
+					helloAmd.show(name, {animate: true, speed:10});
+				});
+			}
+			require(['ace','console'], function(e,c){
+				e.create({height:'200px', noScroll: true, url:'scripts/helloAmdWithAnimation.js', mode: 'ace/mode/javascript', header: '<img src="js.png"><a href="scripts/helloAmdWithAnimation.js" target="blank">scripts/helloAmdWithAnimation.js</a>'});
+				e.create({height:'380px', noScroll: true, url:'scripts/animate.js', mode: 'ace/mode/javascript', header: '<img src="js.png"><a href="scripts/animate.js" target="blank">scripts/animate.js</a>'});
+				e.create({height:'260px', noScroll: true, header: '<img src="page.png"><a href="05_RequireJs.html" target="blank">05_RequireJs.html</a>'});
+				c.create();
+			});
+		</script>
+		
+	</body>
+</html>
+
